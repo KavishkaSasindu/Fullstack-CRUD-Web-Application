@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -51,6 +52,58 @@ public class UserController {
 //            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
             return  ResponseEntity.status(500).body("Something went wrong" + e.getMessage());
         }
+    }
+
+    @GetMapping("/allUsers")
+    public ResponseEntity<?> getALlUsers() {
+
+        List<UserProfile> userProfile = userService.getAllUsers();
+        try{
+
+            if(userProfile.isEmpty()){
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(("No users found in database"));
+            }
+
+            return ResponseEntity.status(HttpStatus.OK).body(userProfile);
+
+        }catch(Exception e){
+
+//            return new ResponseEntity<>("Something went wrong",HttpStatus.INTERNAL_SERVER_ERROR);
+            return ResponseEntity.status(500).body("Something went wrong" + e.getMessage());
+        }
+    }
+
+    @GetMapping("/oneUser/{userIndex}")
+    public ResponseEntity<?> getUserById(@PathVariable int userIndex) {
+
+
+        try{
+            UserProfile user = userService.getUserProfile(userIndex);
+            if(user == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+            }
+            return ResponseEntity.status(HttpStatus.OK).body(user);
+
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Something went wrong" + e.getMessage());
+        }
+    }
+
+    @GetMapping("oneUser/{userIndex}/image")
+    public ResponseEntity<?> getUserImage(@PathVariable int userIndex) {
+
+
+        try {
+            UserProfile user = userService.getUserProfile(userIndex);
+            if(user == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+            }
+
+            return ResponseEntity.status(200).body(user.getImageData());
+        }catch (Exception e){
+            return ResponseEntity.status(500).body(e.getMessage());
+        }
+
     }
 
 }

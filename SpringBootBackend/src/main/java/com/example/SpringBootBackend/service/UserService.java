@@ -38,4 +38,10 @@ public class UserService {
         return userProfileRepo.findAll();
     }
 
+    public UserProfile getUserProfile(int userIndex) {
+        Optional<UserProfile> userProfile = userProfileRepo.findById(userIndex);
+
+        return userProfile.orElse(null);
+    }
+
 }
