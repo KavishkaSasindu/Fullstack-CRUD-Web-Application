@@ -16,26 +16,17 @@ public class UserProfile {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int userIndexId;
-
-    @Column(nullable = false, unique = true)
     private int userId;
-
     @Column(nullable = false)
     private String firstName;
-
     @Column(nullable = false)
     private String lastName;
-
     @Column(nullable = false,unique = true)
     private String email;
-
-    @Column(nullable = false)
+    private String address;
     private String imageName;
-
-    @Column(nullable = false)
     private String imageType;
-
-    @Column(nullable = false)
+    @Lob
     private byte[] imageData;
 
 
